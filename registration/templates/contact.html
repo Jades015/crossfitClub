@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="contact-wrapper">
+  <h2>Contact Us</h2>
+  <div class="contact-group">
+    <h3>Faculty Coordinator</h3>
+    <div class="contact-card">
+      <h4>Ms. Monisha Nath </h4>
+      <p>📞 +91 98004 05578</p>
+      <p>✉️ monisha1.nath@adamasuniversity.ac.in</p>
+    </div>
+  </div>
+  <div class="contact-group">
+    <h3>Student Coordinators</h3>
+    <div class="contact-card">
+      <h4>Jagritee De</h4>
+      <p>📞 +91 77229 27043</p>
+      <p>✉️ jagritee1.de@stu.adamasuniversity.ac.in</p>
+    </div>
+    <div class="contact-card">
+      <h4>Shreya Saha</h4>
+      <p>📞 +91 74399 89911</p>
+      <p>✉️ shreya4.saha@stu.adamasuniversity.ac.in</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .contact-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .contact-group {
+    margin-bottom: 40px;
+  }
+
+  .contact-group h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+  }
+
+  .contact-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    word-wrap: break-word;
+  }
+
+  .contact-card h4 {
+    margin-bottom: 10px;
+    color: #0d6efd;
+  }
+
+  @media (max-width: 768px) {
+    .contact-wrapper {
+      padding: 15px;
+    }
+  }
+</style>
+{% endblock %}
+

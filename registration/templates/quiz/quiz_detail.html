@@ -1,0 +1,247 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="quiz-container">
+  <h2>{{ quiz.title }}</h2>
+  <div class="progress">
+    <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
+  </div>
+
+  <form method="post" id="quiz-form">
+    {% csrf_token %}
+    {% for question in questions %}
+      <div class="question-block" data-question="{{ forloop.counter0 }}" style="display: {% if forloop.first %}block{% else %}none{% endif %};">
+        <p class="question-text"><strong>{{ forloop.counter }}. {{ question.text }}</strong></p>
+        <div class="options">
+          {% for option in question.shuffled_options %}
+            <label class="option">
+              <input type="radio" name="question_{{ question.id }}" value="{{ option.type }}" required>
+              {{ option.text }}
+            </label>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+
+    <div class="nav-buttons">
+      <button type="button" class="btn back-btn" style="display: none;">⬅ Back</button>
+      <button type="button" class="btn next-btn">Next ➡</button>
+      <button type="submit" class="btn submit-btn" style="display: none;">Submit</button>
+    </div>
+  </form>
+</div>
+
+<style>
+  body {
+    background: radial-gradient(circle at top left, #e6f7f1, #dbeaff);
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: moveDots 60s linear infinite;
+    z-index: 0;
+  }
+
+  @keyframes moveDots {
+    from { background-position: 0 0; }
+    to { background-position: 60px 60px; }
+  }
+
+  .quiz-container {
+    position: relative;
+    z-index: 1;
+    padding: 30px 20px;
+    width: 100%;
+    max-width: 700px;
+    box-sizing: border-box;
+  }
+
+  h2 {
+    text-align: center;
+    color: #477b72;
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .progress {
+    background: #d3e0dc;
+    border-radius: 50px;
+    overflow: hidden;
+    height: 12px;
+    margin: 20px 0;
+  }
+
+  .progress-bar {
+    height: 12px;
+    background: linear-gradient(90deg, #88d4ab, #6f9eaf, #b6d7a8);
+    background-size: 200% 200%;
+    animation: gradientMove 4s ease infinite;
+    transition: width 0.4s ease;
+  }
+
+  @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .question-block {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .question-text {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: #333;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .option {
+    background: #ffffff;
+    border: 2px solid #c2e6d3;
+    border-radius: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+  }
+
+  .option:hover {
+    background: #e8faf1;
+  }
+
+  .option input[type="radio"] {
+    display: none;
+  }
+
+  .option.selected {
+    background: #d9f2e5;
+    border-color: #5bb67a;
+    font-weight: bold;
+  }
+
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    flex: 1 1 45%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .next-btn, .submit-btn {
+    background: #5bb67a;
+    color: #fff;
+  }
+
+  .next-btn:hover, .submit-btn:hover {
+    background: #4aa869;
+  }
+
+  .back-btn {
+    background: #7b8eb4;
+    color: #fff;
+  }
+
+  .back-btn:hover {
+    background: #6378a3;
+  }
+
+  @media (max-width: 600px) {
+    body {
+      padding: 20px 10px;
+    }
+    .nav-buttons {
+      flex-direction: column;
+    }
+    .btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>
+
+<script>
+  const questionBlocks = document.querySelectorAll('.question-block');
+  const nextBtn = document.querySelector('.next-btn');
+  const backBtn = document.querySelector('.back-btn');
+  const submitBtn = document.querySelector('.submit-btn');
+  const total = questionBlocks.length;
+  const progressBar = document.getElementById('progress-bar');
+  let current = 0;
+
+  questionBlocks.forEach(block => {
+    block.querySelectorAll('.option').forEach(option => {
+      option.addEventListener('click', () => {
+        block.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        option.querySelector('input').checked = true;
+      });
+    });
+  });
+
+  nextBtn.addEventListener('click', () => {
+    const selected = questionBlocks[current].querySelector('input[type="radio"]:checked');
+    if (!selected) {
+      alert("Please select an option to continue!");
+      return;
+    }
+    questionBlocks[current].style.display = 'none';
+    current++;
+    if (current < total) {
+      questionBlocks[current].style.display = 'block';
+      updateButtons();
+    }
+    progressBar.style.width = `${(current / total) * 100}%`;
+  });
+
+  backBtn.addEventListener('click', () => {
+    if (current > 0) {
+      questionBlocks[current].style.display = 'none';
+      current--;
+      questionBlocks[current].style.display = 'block';
+      updateButtons();
+      progressBar.style.width = `${(current / total) * 100}%`;
+    }
+  });
+
+  function updateButtons() {
+    backBtn.style.display = current > 0 ? 'inline-block' : 'none';
+    nextBtn.style.display = current < total - 1 ? 'inline-block' : 'none';
+    submitBtn.style.display = current === total - 1 ? 'inline-block' : 'none';
+  }
+
+  updateButtons();
+</script>
+{% endblock %}

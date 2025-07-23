@@ -1,0 +1,7 @@
+Django
+Flask
+Pillow
+Gunicorn
+Whitenoise
+
+

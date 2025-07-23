@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="quiz-list-container">
+  <h2 class="quiz-list-title">Choose Your Quiz</h2>
+  <div class="quiz-cards">
+    {% for quiz in quizzes %}
+    <div class="quiz-card">
+      <h3>{{ quiz.title }}</h3>
+      <p style='text-align: left'>{{ quiz.description }}</p>
+      <a href="{% url 'quiz_detail' quiz.id %}" class="btn start-btn">Start Quiz</a>
+    </div>
+    {% empty %}
+    <p>No quizzes available at the moment. Please check back later!</p>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  body {
+    background: #f3f7f9;
+  }
+
+  .quiz-list-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .quiz-list-title {
+    font-size: 2.2rem;
+    color: #2c3e50;
+    margin-bottom: 30px;
+  }
+
+  .quiz-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+  }
+
+  .quiz-card {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 25px 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid #d1ecf1;
+  }
+
+  .quiz-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+  }
+
+  .quiz-card h3 {
+    color: #2980b9;
+    margin-bottom: 15px;
+  }
+
+  .quiz-card p {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+
+  .btn.start-btn {
+    background: #27ae60;
+    color: #fff;
+    padding: 10px 25px;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: background 0.3s;
+    display: inline-block;
+  }
+
+  .btn.start-btn:hover {
+    background: #1e8449;
+  }
+
+  @media (max-width: 768px) {
+    .quiz-list-title {
+      font-size: 1.8rem;
+    }
+    .quiz-card {
+      padding: 20px 15px;
+    }
+  }
+</style>
+{% endblock %}

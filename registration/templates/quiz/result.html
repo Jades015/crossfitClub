@@ -1,0 +1,223 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="result-page-wrapper">
+  <div class="result-container {{ tip.title|lower|slugify }}">
+    <div class="result-card">
+      <h2>{{ quiz.title }} - Result</h2>
+      <div class="result-badge">{{ tip.title }}</div>
+      <p class="result-description">{{ tip.description }}</p>
+
+      <div class="result-section">
+        <h4>✅ Do:</h4>
+        <p>{{ tip.do }}</p>
+      </div>
+
+      <div class="result-section">
+        <h4>❌ Don't:</h4>
+        <p>{{ tip.dont }}</p>
+      </div>
+
+      <a href="{% url 'quiz_detail' quiz.id %}" class="btn btn-primary try-again">Try Again</a>
+      <div class="result-actions">
+        <a href="{% url 'quiz_list' %}" class="btn btn-primary">Take Another Quiz</a>
+        <a href="{% url 'register' %}" class="btn btn-primary">Register for Club</a>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="confetti-canvas"></canvas>
+</div>
+
+<style>
+  body {
+    background: linear-gradient(135deg, #e6f7f1, #d0ebff);
+    overflow-x: hidden;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .result-page-wrapper {
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  .result-container {
+    max-width: 600px;
+    width: 100%;
+  }
+
+  .result-card {
+    background: #ffffffdd;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    padding: 40px 30px;
+    text-align: center;
+    animation: fadeInUp 0.8s ease;
+    backdrop-filter: blur(5px);
+  }
+
+  .result-card h2 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+  }
+
+  .result-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #00c9a7, #00b4d8);
+    color: #fff;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .result-description {
+    margin-bottom: 20px;
+    color: #555;
+  }
+
+  .result-section {
+    text-align: left;
+    background: #f0f9f7;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border-left: 5px solid #00c9a7;
+  }
+
+  .result-section h4 {
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .try-again {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 12px 30px;
+    background: #00b4d8;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: background 0.3s ease;
+  }
+
+  .try-again:hover {
+    background: #0096c7;
+  }
+
+  .result-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+
+  .btn-primary {
+    background: #00b4d8;
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #0096c7;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  canvas#confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  @media (max-width: 600px) {
+    .result-card {
+      padding: 30px 20px;
+    }
+  }
+</style>
+
+<script>
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  let W = window.innerWidth, H = window.innerHeight;
+  canvas.width = W; canvas.height = H;
+
+  const confetti = [];
+  for(let i = 0; i < 100; i++) {
+    confetti.push({
+      x: Math.random() * W,
+      y: Math.random() * H - H,
+      r: Math.random() * 6 + 4,
+      d: Math.random() * 50 + 10,
+      color: `hsl(${Math.random() * 60 + 160}, 70%, 60%)`,  // calm green/blue range
+      tilt: Math.random() * 10 - 10
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    confetti.forEach(c => {
+      ctx.beginPath();
+      ctx.lineWidth = c.r;
+      ctx.strokeStyle = c.color;
+      ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
+      ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r / 2);
+      ctx.stroke();
+    });
+    update();
+  }
+
+  function update() {
+    confetti.forEach(c => {
+      c.y += Math.cos(c.d) + 1 + c.r/2;
+      c.x += Math.sin(c.d);
+      if (c.y > H) {
+        c.x = Math.random() * W;
+        c.y = -10;
+      }
+    });
+  }
+
+  setInterval(draw, 20);
+
+  window.addEventListener('resize', () => {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+  });
+</script>
+{% endblock %}
+
+
+

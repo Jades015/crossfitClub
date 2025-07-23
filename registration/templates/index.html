@@ -1,0 +1,162 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="welcome-section">
+  <h1>Welcome to <span>Crossfit Health Club!</span></h1>
+  <img src="{% static 'images/club_logo.jpeg' %}" alt="Crossfit Health Club" class="welcome-logo">
+
+  <p class="intro">
+    An official student-run club under Adamas University, dedicated to building a healthier, happier, and stronger student community. We believe true well-being goes beyond just fitness — it’s about mental strength, good habits, personal growth, and a supportive circle. Through weekly practical sessions, fun activities, and peer support, we help you unlock your best self — so you’re not just ready for a career, but truly ready for life.
+  </p>
+
+  <div class="highlights">
+    <h2>✨ What We Do</h2>
+    <ul>
+      <li>💪 <strong>Fitness:</strong> Strength, endurance, and fun movement for all levels.</li>
+      <li>🧘 <strong>Mental Wellness:</strong> Stress-busting, mindfulness, and feel-good workshops.</li>
+      <li>🎙️ <strong>Personality Boost:</strong> Confidence, communication, and life hacks.</li>
+      <li>🧼 <strong>Good Habits:</strong> Healthy routines, hygiene, lifestyle tips.</li>
+      <li>🤝 <strong>Community:</strong> Meet people, make friends, grow together.</li>
+      <li>🎉 <strong>Fun Events:</strong> Games, quizzes, challenges, and hangouts.</li>
+    </ul>
+  </div>
+
+  <div class="weekly">
+    <h2>🌟 Why Join?</h2>
+    <p>
+      Weekly sessions that are practical & interactive — no boring lectures!
+      Every week has a new theme: fitness, focus, grooming, stress relief, confidence, and more.
+      Learn by doing, meet awesome people, and build habits that stay for life.
+    </p>
+  </div>
+
+  <p class="cta-text">Ready to unlock your best self?</p>
+
+  <a href="{% url 'register' %}" class="btn-register">Register Now</a>
+</div>
+
+<style>
+  body {
+    background: linear-gradient(135deg, #e0f7fa, #ffffff);
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0 1rem;
+  }
+
+  .welcome-section {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: clamp(1.5rem, 5vw, 3rem);
+    border-radius: 15px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  .welcome-section h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #2c3e50;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .welcome-section h1 span {
+    color: #3498db;
+  }
+
+  .welcome-logo {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    display: block;
+    margin: 0 auto 30px auto;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .intro {
+    color: #555;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    margin-bottom: 20px;
+    line-height: 1.6;
+    text-align: justify;
+  }
+
+  .highlights {
+    text-align: left;
+    margin: 40px 0;
+  }
+
+  .highlights h2 {
+    text-align: center;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: 20px;
+    color: #2c3e50;
+  }
+
+  .highlights ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .highlights ul li {
+    background: #f1f8ff;
+    margin: 10px 0;
+    padding: 15px 20px;
+    border-left: 5px solid #3498db;
+    border-radius: 8px;
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+  }
+
+  .weekly {
+    margin: 40px 0;
+    text-align: center;
+  }
+
+  .weekly h2 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: 15px;
+    color: #2c3e50;
+  }
+
+  .weekly p {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    color: #555;
+    line-height: 1.7;
+  }
+
+  .cta-text {
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+    font-weight: bold;
+    margin: 30px 0 20px 0;
+    color: #2c3e50;
+  }
+
+  .btn-register {
+    display: inline-block;
+    padding: 15px 35px;
+    background: #3498db;
+    color: #ffffff;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .btn-register:hover {
+    background: #217dbb;
+    transform: translateY(-2px);
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+</style>
+
+{% endblock %}

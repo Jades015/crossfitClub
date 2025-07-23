@@ -1,0 +1,140 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crossfit Health Club</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f9f8;
+      color: #333;
+    }
+
+    .sidebar {
+      background: #2c3e50;
+      color: #fff;
+      width: 220px;
+      padding: 30px 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      z-index: 999;
+      transform: translateX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-100%);
+    }
+
+    .sidebar h2 {
+      font-size: 1.4rem;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .sidebar a {
+      color: #ecf0f1;
+      text-decoration: none;
+      padding: 12px 20px;
+      margin: 5px 0;
+      width: 100%;
+      border-radius: 5px;
+      text-align: center;
+      transition: background 0.2s ease;
+    }
+
+    .sidebar a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-divider {
+      width: 80%;
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      margin: 15px 0;
+    }
+
+    .logo {
+      width: 100px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .main {
+      margin-left: 220px;
+      padding: 30px;
+      transition: margin-left 0.3s ease;
+      min-height: 100vh;
+    }
+
+    .toggle-btn {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #2c3e50;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+      z-index: 1001;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.collapsed {
+        transform: translateX(0);
+      }
+
+      .toggle-btn {
+        display: block;
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+  <div class="sidebar" id="sidebar">
+    <br>
+    <h2>Crossfit Health Club</h2>
+    <a href="{% url 'index' %}">🏠 Home</a>
+    <hr class="sidebar-divider">
+    <a href="{% url 'register' %}">📝 Register</a>
+    <hr class="sidebar-divider">
+    <a href="{% url 'quiz_list' %}">🧩 Quizzes</a>
+    <hr class="sidebar-divider">
+    <a href="{% url 'contact' %}">📞 Contact Us</a>
+  </div>
+
+  <div class="main">
+    {% block content %}{% endblock %}
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+  </script>
+</body>
+
+</html>
